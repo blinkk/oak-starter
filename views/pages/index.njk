@@ -1,0 +1,41 @@
+---
+fields:
+- id: meta
+  type: group
+  label: Meta
+  fields:
+    - id: title
+      type: string
+      label: Title
+    - id: description
+      type: string
+      label: Description
+      help: Optional. The description is used for SEO and social shares. It's not visibily rendered on the page itself.
+    - id: image
+      type: image
+      label: Image
+      help: "This image is used as the blog post's hero image as well as for social shares. Max size: 5MB."
+
+---
+
+{% extends "/views/base.njk" %}
+
+{% block main %}
+<header>
+  <ul>
+  {% for link in doc.fields.header.links %}
+    <li><a href="{{link.url}}">{{link.title}}</a></li>
+  {% endfor %}
+  </ul>
+</header>
+<h1>{{_(doc.fields.meta.title)}}</h1>
+<ul>
+{% for post in posts %}
+  <li>
+    <a href="{{post.getLocalizedUrl(doc.locale)}}">{{post.fields.meta.title}}</a>
+  </li>
+{% endfor %}
+</ul>
+<div>
+</div>
+{% endblock %}

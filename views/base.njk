@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="{{doc.locale.replace('_', '-')}}">
+  <head>
+    <meta charset="utf-8">
+    <title>{% if doc.fields.meta.title %}{{_(doc.fields.meta.title)}} - {% endif %}{{pod.podspec.name}}</title>
+    {% if doc.fields.meta.description %}
+      <meta name="description" content="{{_(doc.fields.meta.description)}}">
+    {% endif %}
+  </head>
+  <body>
+    {% block main %}{% endblock %}
+    <script src="/js/main.min.js"></script>
+  </body>
+</html>

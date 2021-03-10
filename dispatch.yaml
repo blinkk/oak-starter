@@ -1,0 +1,5 @@
+dispatch:
+  - url: '*/cms/*'
+    service: oak-webui
+  - url: '*/*'
+    service: oak-server

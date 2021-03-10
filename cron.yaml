@@ -1,0 +1,9 @@
+
+cron:
+- description: "oak: scheduled deploys"
+  url: /cms/cron/scheduled_deploy
+  schedule: every 1 mins
+  retry_parameters:
+    job_retry_limit: 1
+    min_backoff_seconds: 15
+  target: oak-webui

@@ -1,0 +1,7 @@
+template: /views/pages/index.njk
+
+fields:
+  meta:
+    title: Home Page
+    description: Lorem ipsum.
+  header: !oak.yaml /content/global/header.yaml

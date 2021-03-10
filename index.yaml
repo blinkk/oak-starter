@@ -1,0 +1,42 @@
+indexes:
+# Used on CollectionListPage for "SCHEDULED DOCS" listing.
+- kind: OakDB
+  properties:
+  - name: subdirs
+  - name: collectionId
+  - name: scheduled
+  - name: scheduledDeployAt
+
+# Used on CollectionListPage for "RECENTLY EDITED" listing.
+- kind: OakDB
+  properties:
+  - name: subdirs
+  - name: collectionId
+  - name: draftOrPublished
+  - name: modifiedAt
+    direction: desc
+
+# Used on CollectionListPage for "ALL DOCUMENTS" listing.
+- kind: OakDB
+  properties:
+  - name: subdirs
+  - name: collectionId
+  - name: draftOrPublished
+  - name: publishedOrModifiedAt
+    direction: desc
+
+# Used by DocsListProvider to fetch the most recently published docs.
+- kind: OakDB
+  properties:
+  - name: collectionId
+  - name: published
+  - name: subdirs
+  - name: publishedAt
+    direction: desc
+
+# Used by Oak DB versions to fetch the latest versions.
+- kind: OakDBVersion
+  ancestor: yes
+  properties:
+  - name: modifiedAt
+    direction: desc

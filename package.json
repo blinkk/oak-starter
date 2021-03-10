@@ -1,0 +1,27 @@
+{
+  "name": "<project_id>",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "oak run --mode=dev",
+    "gulp:dev": "gulp",
+    "gulp:prod": "gulp build",
+    "migratedb": "oak migratedb",
+    "start": "oak run --mode=prod"
+  },
+  "engines": {
+    "node": "14.x.x"
+  },
+  "dependencies": {
+    "@oak/oak": "latest"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-rename": "^2.0.0",
+    "gulp-sass": "^4.1.0",
+    "webpack": "^5.16.0",
+    "webpack-merge": "^5.7.3",
+    "webpack-stream": "^6.1.1"
+  }
+}

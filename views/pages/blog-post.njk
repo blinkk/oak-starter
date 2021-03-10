@@ -1,0 +1,126 @@
+---
+fields:
+- id: meta
+  type: group
+  label: Meta
+  fields:
+    - id: title
+      type: string
+      label: Title
+    - id: description
+      type: string
+      label: Description
+      help: Optional. The description is used for SEO and social shares. It's not visibily rendered on the page itself.
+    - id: image
+      type: image
+      label: Image
+      help: |
+          This image is used as the blog post's hero image as well as for social shares.
+
+          Max size: 10MB.
+    - id: category
+      type: select
+      label: Category
+      options:
+      - label: ''
+        value: ''
+      - label: Release Notes
+        value: release-notes
+      - label: Event
+        value: event
+    - id: tags
+      type: string
+      label: Tags
+      repeated: true
+      multiline: false
+    - id: featured
+      type: boolean
+      label: Featured?
+      help: Check the box below to mark this as a featured blog post.
+- id: content
+  type: group
+  label: Content
+  fields:
+    - id: body
+      type: string
+      label: Markdown Body
+      default_value: hello world
+      help: |
+          Markdown cheat sheet: [markdownguide.org/cheat-sheet](https://www.markdownguide.org/cheat-sheet/)
+
+          **Tips**
+
+          * Avoid using direct HTML
+    - id: blocks
+      types:
+      - MarkdownBlock
+      - ImageBlock
+      - ImageGridBlock
+      repeated: true
+- id: advanced
+  type: group
+  label: Advanced
+  fields:
+  - id: footer_html
+    label: Footer HTML
+    type: string
+types:
+  MarkdownBlock:
+    fields:
+    - id: markdown
+      type: string
+  ImageBlock:
+    fields:
+    - id: image
+      type: image
+  ImageGridBlock:
+    fields:
+    - id: image1
+      type: image
+    - id: image2
+      type: image
+    - id: image3
+      type: image
+
+---
+
+{% extends "/views/base.njk" %}
+
+{% block main %}
+
+<div class="post">
+  <h1 class="post__title">{{doc.fields.meta.title}}</h1>
+  {% if doc.fields.meta.image %}
+    <div class="post__image">
+      <img src="{{doc.fields.meta.image.url}}" style="display: block; max-width: 100%; width: 450px">
+    </div>
+  {% endif %}
+
+  <div class="post__body">
+    {{doc.fields.content.body|markdown}}
+  </div>
+
+  {% for item in doc.fields.content.blocks %}
+    <div class="post__block post__block--{{item._type}}">
+      {% if item._type == 'MarkdownBlock' %}
+        {{item.markdown|markdown}}
+      {% elif item._type == 'ImageBlock' %}
+        <img src="{{item.image.url}}" style="display: block; max-width: 100%; width: 450px">
+      {% elif item._type == 'ImageGridBlock' %}
+        <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr 1fr; column-gap: 12px">
+          <div class="grid__item"><img src="{{item.image1.url}}" style="display: block; max-width: 100%; width: 450px"></div>
+          <div class="grid__item"><img src="{{item.image2.url}}" style="display: block; max-width: 100%; width: 450px"></div>
+          <div class="grid__item"><img src="{{item.image3.url}}" style="display: block; max-width: 100%; width: 450px"></div>
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+
+  {% if doc.fields.advanced.footer_html %}
+    <div class="post__footer">
+      {{doc.fields.advanced.footer_html|safe}}
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}

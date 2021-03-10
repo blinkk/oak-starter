@@ -1,0 +1,35 @@
+name: '<project_name>'
+gcp_project: '<gcp_project>'
+timezone: America/Los_Angeles
+
+auth:
+  orgs:
+    - blinkk.com
+
+routes:
+  # Collections.
+  - path: /blog/:slug
+    collection: BlogPost
+    localized: true
+
+  # YAML pages.
+  - path: /
+    yaml: /content/pages/index.yaml
+    localized: true
+  - path: /events/:slug/
+    yaml: /content/events/$slug.yaml
+    localized: true
+
+  # Static files.
+  - path: /images/*filepath
+    static_path: /source/images/$filepath
+  - path: /js/*filepath
+    static_path: /dist/js/$filepath
+  - path: /css/*filepath
+    static_path: /dist/css/$filepath
+
+localization:
+  path: /{locale}/{path}
+  default_locale: en
+  locales:
+    - en

@@ -1,0 +1,5 @@
+template: /views/pages/blog-post.njk
+experimental_layout:
+  enabled: true
+  title: meta.title
+  image: meta.image
