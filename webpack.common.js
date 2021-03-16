@@ -26,5 +26,4 @@ module.exports = {
     path: path.resolve(__dirname, 'dist/js'),
     filename: '[name].min.js',
   },
-  stats: 'verbose',
 };
