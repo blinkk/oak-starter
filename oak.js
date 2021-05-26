@@ -1,3 +1,1 @@
-module.exports = function (pod) {
-  // Custom Nunjucks globals and filters.
-};
+module.exports = require('./dist/oak.js');
