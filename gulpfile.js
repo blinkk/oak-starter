@@ -1,20 +1,97 @@
-/* eslint-disable node/no-unpublished-require */
-const gulp = require('gulp');
-const webpack = require('webpack');
-const webpackDevConfig = require('./webpack.dev.js');
-const webpackProdConfig = require('./webpack.prod.js');
-const webpackStream = require('webpack-stream');
-const sass = require('gulp-sass');
-const rename = require('gulp-rename');
 const autoprefixer = require('gulp-autoprefixer');
+const colors = require('colors/safe');
+const esbuild = require('esbuild');
+const fs = require('fs');
+const gulp = require('gulp');
+const path = require('path');
+const rename = require('gulp-rename');
+const sass = require('gulp-sass');
+sass.compiler = require('sass');
 
-const SASS_SOURCE = ['./source/sass/*.sass', './source/sass/**/*.sass'];
+ENTRIES = {
+  oak: {
+    src: ['./src/oak/oak.ts'],
+    out: './dist/oak.js',
+    watch: ['./src/oak/**/*.ts', './oakspec.yaml'],
+  },
+  js: {
+    src: ['./src/ts/main.ts'],
+    out: './dist/main.esm.js',
+    watch: ['./src/ts/**/*.ts'],
+  },
+  sass: {
+    src: ['./src/sass/main.sass'],
+    out: './dist/main.min.css',
+    watch: ['./src/sass/**/*.sass'],
+  },
+};
 
-const TS_SOURCE = ['./source/js/*.ts', './source/js/*/**.ts'];
+function logStats(outfiles) {
+  if (!Array.isArray(outfiles)) {
+    outfiles = [outfiles];
+  }
+  outfiles.forEach(outfile => {
+    const indent = ' '.repeat(4);
+    const paddedSize = fileSize(outfile).padStart(8, ' ');
+    const file = path.normalize(outfile);
+    console.log(`${indent}${colors.white(paddedSize)}  ${colors.bold.white(file)}`);
+  });
+}
 
-gulp.task('sass', () => {
+function fileSize(filepath) {
+  const stats = fs.statSync(filepath);
+  const bytes = stats.size;
+
+  const k = 1024;
+  const units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + units[i];
+}
+
+gulp.task('build:oak', async () => {
+  await esbuild.build({
+    entryPoints: ENTRIES.oak.src,
+    bundle: true,
+    outfile: ENTRIES.oak.out,
+    platform: 'node',
+  });
+  logStats(ENTRIES.oak.out);
+});
+
+gulp.task('build:js:dev', async () => {
+  await esbuild.build({
+    entryPoints: ENTRIES.js.src,
+    bundle: true,
+    outfile: ENTRIES.js.out,
+    platform: 'browser',
+    format: 'esm',
+  });
+  logStats(ENTRIES.js.out);
+});
+
+gulp.task('build:js:prod', async () => {
+  await esbuild.build({
+    entryPoints: ENTRIES.js.src,
+    bundle: true,
+    outfile: ENTRIES.js.out,
+    platform: 'browser',
+    format: 'esm',
+    minify: true,
+  });
+  logStats(ENTRIES.js.out);
+});
+
+gulp.task('watch:js', () => {
+  return gulp.watch(
+    ENTRIES.js.watch,
+    {ignoreInitial: false},
+    gulp.series('build:js:dev')
+  );
+});
+
+gulp.task('build:sass', () => {
   return gulp
-    .src('./source/sass/main.sass')
+    .src(ENTRIES.sass.src)
     .pipe(
       sass({
         outputStyle: 'compressed',
@@ -23,32 +100,23 @@ gulp.task('sass', () => {
     )
     .on('error', sass.logError)
     .pipe(
-      rename(path => {
-        path.basename += '.min';
+      rename(filepath => {
+        filepath.basename = path.basename(ENTRIES.sass.out).slice(0, -4);
       })
     )
     .pipe(autoprefixer())
-    .pipe(gulp.dest('./dist/css/'));
+    .pipe(gulp.dest(path.dirname(ENTRIES.sass.out)));
 });
 
-gulp.task('ts:dev', () => {
-  return gulp
-    .src('./source/js/main.ts')
-    .pipe(webpackStream(webpackDevConfig, webpack))
-    .pipe(gulp.dest('./dist/js/'));
+gulp.task('watch:sass', () => {
+  return gulp.watch(
+    ENTRIES.sass.watch,
+    {ignoreInitial: false},
+    gulp.series('build:sass')
+  );
 });
 
-gulp.task('ts:prod', () => {
-  return gulp
-    .src('./source/js/main.ts')
-    .pipe(webpackStream(webpackProdConfig, webpack))
-    .pipe(gulp.dest('./dist/js/'));
-});
-
-gulp.task('watch', () => {
-  gulp.watch(SASS_SOURCE, {ignoreInitial: false}, gulp.series('sass'));
-  gulp.watch(TS_SOURCE, {ignoreInitial: false}, gulp.series('ts:dev'));
-});
-
-gulp.task('build', gulp.parallel('sass', 'ts:prod'));
+gulp.task('watch', gulp.parallel('watch:sass', 'watch:js'));
+gulp.task('build', gulp.parallel('build:sass', 'build:js:prod', 'build:oak'));
 gulp.task('default', gulp.series('watch'));
+

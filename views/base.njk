@@ -9,6 +9,6 @@
   </head>
   <body>
     {% block main %}{% endblock %}
-    <script src="/js/main.min.js"></script>
+    <script type="module">import('/js/main.esm.js').then(module=>module.main())</script>
   </body>
 </html>
