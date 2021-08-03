@@ -64,7 +64,9 @@ const DEFAULT_BREAKPOINTS = {
  *
  * ```
  * <!-- bottom of base.njk -->
- * <style>{{doc.responsiveStyles.css()}}</style>
+ * {% if doc.responsiveStyles.size() > 0 %}
+ *   <style>{{doc.responsiveStyles.css()}}</style>
+ * {% endif %}
  * ```
  */
 export class ResponsiveStylesPlugin {
@@ -162,11 +164,13 @@ class ResponsiveStyles {
    * Renders the CSS styles added to the object.
    */
   css() {
-    const styles = Object.values(this.styles);
-    if (styles.length === 0) {
-      return '';
-    }
-    const css = styles.join(' ');
-    return css;
+    return Object.values(this.styles).join(' ');
+  }
+
+  /**
+   * Returns the number of styles added.
+   */
+  size() {
+    return Object.values(this.styles).length;
   }
 }
