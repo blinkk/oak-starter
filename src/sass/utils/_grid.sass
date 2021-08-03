@@ -1,0 +1,124 @@
+// Grid.
+//
+// The grid system is a 12-column grid with 24px padding and gutters, except on
+// mobile, which uses a 4-column grid. The grid container uses a fixed content
+// width on tablet and desktop breakpoints which is intended to make it easier
+// for devs, so that there is less variability with designs at different
+// viewport widths.
+//
+// In general, we recommend using the global "grid" CSS class to tag elements as
+// part of the grid since the global class has default column widths for the
+// grid children.
+//
+// Basic usage:
+//
+//     <div class="customlayout grid">
+//       <div class="customlayout__image"> ... </div>
+//       <div class="customlayout__chapter"> ... </div>
+//     </div>
+//
+//     .customlayout__image
+//       +laptop-gt
+//         +grid-columns(1, 6)
+//     .customlayout__chapter
+//       +laptop-gt
+//         +grid-columns(7, 12)
+//
+// The above example works well for the general use case, but if you need to
+// reverse the order of the grid elements as a variation of your layout, you
+// can also use the `grid-template-areas` feature of CSS grids.
+//
+// For example:
+//
+//     .customlayout
+//       +laptop-gt
+//         grid-template-areas: 'img img img img img img chp chp chp chp chp chp'
+//     .customlayout--reversed
+//       +laptop-gt
+//         grid-template-areas: 'chp chp chp chp chp chp img img img img img img'
+//     .customlayout__image
+//       +laptop-gt
+//         grid-area: img
+//     .customlayout__chapter
+//       +laptop-gt
+//         grid-area: chp
+
+@use "sass:math"
+
+$page-max-width: 1680px
+
+$grid-column-gap-mobile: 24px
+$grid-column-gap-tablet: 24px
+$grid-column-gap-laptop: 24px
+$grid-column-gap-desktop: 24px
+$grid-horizontal-padding-mobile: 16px
+$grid-horizontal-padding-tablet: 24px
+$grid-horizontal-padding-laptop: 24px
+$grid-max-width-tablet: 600px
+$grid-max-width-desktop: 1392px
+
+// The grid container. Mobile uses a 4-col grid with 16px padding and 24px
+// gutters. All other breakpoints use a 12-col grid with 24px padding and 24px
+// gutters. Tablet and desktop use fixed content widths.
+=grid-container
+  display: grid
+  +mobile
+    column-gap: $grid-column-gap-mobile
+    grid-template-columns: repeat(4, 1fr)
+    padding: 0 $grid-horizontal-padding-mobile
+  +tablet
+    column-gap: $grid-column-gap-tablet
+    grid-template-columns: repeat(12, 1fr)
+    padding: 0 $grid-horizontal-padding-tablet
+    max-width: $grid-max-width-tablet
+    margin: 0 auto
+  +laptop
+    column-gap: $grid-column-gap-laptop
+    grid-template-columns: repeat(12, 1fr)
+    padding: 0 $grid-horizontal-padding-laptop
+  +desktop
+    column-gap: $grid-column-gap-desktop
+    grid-template-columns: repeat(12, 1fr)
+    margin: 0 auto
+    max-width: $grid-max-width-desktop
+
+// Grid column. Defines the start and end column numbers (1-indexed) that a
+// grid child should span.
+=grid-columns($start, $end)
+  grid-column-start: #{$start}
+  grid-column-end: span #{$end - $start + 1}
+
+// Overlay for debugging purposes.
+=grid-overlay
+  height: 100vh
+  left: 0
+  pointer-events: none
+  position: fixed
+  top: 0
+  width: 100%
+  z-index: 2000
+  +desktop
+    left: calc(max(0px, 50% - #{math.div($page-max-width, 2)}))
+    max-width: $page-max-width
+  .grid
+    height: 100%
+  .grid__col
+    grid-column-start: span 1
+    background-color: rgba(cyan, 0.125)
+    box-shadow: none !important
+    color: black
+    font-size: 12px
+    font-weight: 800
+    height: 100%
+    padding-top: 12px
+    text-align: center
+    &:nth-child(5),
+    &:nth-child(6),
+    &:nth-child(7),
+    &:nth-child(8),
+    &:nth-child(9),
+    &:nth-child(10),
+    &:nth-child(11),
+    &:nth-child(12)
+      +mobile
+        display: none

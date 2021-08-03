@@ -9,7 +9,7 @@ install: update-oak node_modules
 # The `make run` command starts a dev server and runs gulp in watch mode.
 .PHONY: run
 run:
-	npm run dev:watcher & npm run gulp:dev
+	npm run dev:watcher & npm run gulp
 
 # The `make deploy` command deploys oak to App Engine under two different
 # services: oak-webui and oak-server. IAP should be configured so that only

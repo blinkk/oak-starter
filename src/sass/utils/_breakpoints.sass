@@ -1,0 +1,88 @@
+// Breakpoint mixins.
+//
+// The breakpoint widths are:
+//
+//   mobile: <= 767px
+//   tablet: >= 768px and <= 1023px
+//   laptop: >= 1024px and <= 1439px
+//   desktop: >= 1440px
+//
+// The naming convention for the mixins are as follows:
+//
+//   tablet: Only the "tablet" breakpoint.
+//   tablet-gt: The "tablet" breakpoint and everything greater.
+//   tablet-lt: The "tablet" breakpoint and everything lower.
+
+=gt($min)
+  @media (min-width: #{$min})
+    @content
+
+=lt($max)
+  @media (max-width: #{$max})
+    @content
+
+=between($min, $max)
+  @media (min-width: #{$min}) and (max-width: #{$max})
+    @content
+
+=mobile
+  +lt(767px)
+    @content
+
+=mobile-gt
+  @content
+
+=mobile-lt
+  +lt(767px)
+    @content
+
+=mobile-portrait
+  @media only screen and (orientation: portrait) and (max-width: 767px)
+    @content
+
+=mobile-landscape
+  @media only screen and (orientation: landscape) and (max-width: 767px)
+    @content
+
+=tablet
+  +between(768px, 1023px)
+    @content
+
+=tablet-gt
+  +gt(768px)
+    @content
+
+=tablet-lt
+  +lt(1023px)
+    @content
+
+=tablet-lt-portrait
+  @media only screen and (orientation: portrait) and (max-width: 1023px)
+    @content
+
+=tablet-lt-landscape
+  @media only screen and (orientation: landscape) and (max-width: 1023px)
+    @content
+
+=laptop
+  +between(1024px, 1439px)
+    @content
+
+=laptop-gt
+  +gt(1024px)
+    @content
+
+=laptop-lt
+  +lt(1439px)
+    @content
+
+=desktop
+  +gt(1440px)
+    @content
+
+=desktop-gt
+  +gt(1440px)
+    @content
+
+=desktop-lt
+  @content

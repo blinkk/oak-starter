@@ -1,7 +1,71 @@
+// Border-box hack.
+// https://www.paulirish.com/2012/box-sizing-border-box-ftw/
 html
   box-sizing: border-box
-
 *,
 *:before,
 *:after
   box-sizing: inherit
+
+// Set image aspect ratio based on width and height attrs.
+// https://www.smashingmagazine.com/2020/03/setting-height-width-images-important-again/
+img
+  aspect-ratio: attr(width) / attr(height)
+  display: block
+  height: auto
+  max-width: 100%
+  object-fit: cover
+  width: 100%
+
+// Utility breakpoint classes.
+.mobile
+  +tablet-gt
+    display: none
+.tablet-lt
+  +laptop-gt
+    display: none
+.tablet
+  +mobile
+    display: none
+  +laptop-gt
+    display: none
+.tablet-gt
+  +mobile
+    display: none
+.laptop-lt
+  +desktop
+    display: none
+.laptop
+  +tablet-lt
+    display: none
+  +desktop
+    display: none
+.laptop-gt
+  +tablet-lt
+    display: none
+.desktop
+  +laptop-lt
+    display: none
+
+// Grid system. See utils/_grid.sass.
+.grid
+  +grid-container
+.grid > *
+  +mobile
+    +grid-columns(1, 4)
+  +tablet
+    +grid-columns(1, 12)
+  +laptop-gt
+    +grid-columns(1, 12)
+
+// Grid overlay for devs. Enable by adding ?grid=true to the URL.
+.grid-overlay
+  +grid-overlay
+[grid-overlay="true"] .grid > *
+  box-shadow: inset 0 0 0 1px #DA70D6
+
+// Focus outlines.
+*:focus:not(:focus-visible)
+  outline: none
+*:focus-visible
+  outline: 2px dashed black
