@@ -1,5 +1,6 @@
 PROJECT = <gcp_project>
-
+PROD_VERSION = prod
+STAGING_VERSION = staging
 
 # Run `make install` to set up authentication to the NPM repo and to initialize
 # the project.
@@ -18,7 +19,15 @@ run:
 deploy: node_modules
 	npx google-artifactregistry-auth .npmrc
 	npm run gulp:prod
-	gcloud app deploy -q --project=$(PROJECT) --version=prod webui.yaml app.yaml
+	gcloud app deploy -q --project=$(PROJECT) --version=$(PROD_VERSION) webui.yaml app.yaml
+
+# The `make stage` command deploys oak-webui to App Engine under the version
+# defined by STAGING_VERSION.
+.PHONY: stage
+stage: node_modules
+	npx google-artifactregistry-auth .npmrc
+	npm run gulp:prod
+	gcloud app deploy -q --project=$(PROJECT) --version=$(STAGING_VERSION) webui.yaml
 
 # Run `make migratedb` to apply any necessary changes to the database.
 .PHONY: migratedb

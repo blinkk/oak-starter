@@ -1,3 +1,4 @@
+{% set rs = doc|responsiveStyles %}
 <!doctype html>
 <html lang="{{doc.locale.replace('_', '-')}}">
   <head>
@@ -9,6 +10,7 @@
   </head>
   <body>
     {% block main %}{% endblock %}
+    <style>{{rs.css()}}</style>
     <script type="module">import('/js/main.esm.js').then(module=>module.main())</script>
   </body>
 </html>
