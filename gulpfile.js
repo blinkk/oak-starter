@@ -16,12 +16,12 @@ ENTRIES = {
   },
   js: {
     src: ['./src/ts/main.ts'],
-    out: './dist/main.esm.js',
+    out: './dist/js/main.esm.js',
     watch: ['./src/ts/**/*.ts'],
   },
   sass: {
     src: ['./src/sass/main.sass'],
-    out: './dist/main.min.css',
+    out: './dist/css/main.min.css',
     watch: ['./src/sass/**/*.sass'],
   },
 };

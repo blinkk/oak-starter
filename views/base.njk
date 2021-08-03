@@ -7,10 +7,11 @@
     {% if doc.fields.meta.description %}
       <meta name="description" content="{{_(doc.fields.meta.description)}}">
     {% endif %}
+    <style>{% include "/dist/css/main.min.css" %}</style>
+    <script type="module">import('/js/main.esm.js').then(module=>module.main())</script>
   </head>
   <body>
     {% block main %}{% endblock %}
     {% if rs.size() > 0 %}<style>{{rs.css()}}</style>{% endif %}
-    <script type="module">import('/js/main.esm.js').then(module=>module.main())</script>
   </body>
 </html>

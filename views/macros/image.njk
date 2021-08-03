@@ -1,0 +1,38 @@
+{#
+ # Image macro. Renders an <img> tag with async lazy-loading.
+ #
+ # Note: This macro doesn't automatically size images for each breakpoint. Use
+ # the `picture()` macro instead.
+ #
+ # Options:
+ #   class: CSS class to add to the image.
+ #   url: The url of the image.
+ #   width: The aspect-ratio width of the image.
+ #   height: The aspect-ratio height of the image.
+ #   alt: Alt text to apply. Defaults to ''.
+ #}
+{% macro image(options) %}
+  {% set isDynamic = isCloudImage(options.url) and "=" not in options.url %}
+  {% filter joinLines %}
+    <img
+      class="image{% if options.class %} {{options.class}}{% endif %}{% if options.breakpoint %} {{options.breakpoint}}{% endif %}"
+      decoding="async"
+      loading="lazy"
+      src="{{options.url|replace('{locale}', doc.locale)}}{% if isDynamic %}{% if options.width %}=e365-w{{options.width}}{% else %}=e365-s0{% endif %}{% endif %}"
+      {% if isDynamic and options.width %}
+        srcset="{{options.url}}=rw-e365-w{{options.width * 2}} 2x, {{options.url}}=rw-e365-w{{options.width}} 1x"
+      {% endif %}
+      {% if options.alt %}
+        alt="{{options.alt}}"
+        title="{{options.alt}}"
+      {% else %}
+        alt=""
+      {% endif %}
+      {% if options.width and options.height %}
+        width="{{options.width}}"
+        height="{{options.height}}"
+        style="--imgWidth: {{options.width}}; --imgHeight: {{options.height}}"
+      {% endif %}
+    />
+  {% endfilter %}
+{% endmacro %}

@@ -1,0 +1,38 @@
+{% from "/views/macros/image.njk" import image %}
+
+{#
+ # Picture macro. Similar to the `image()` macro but automatically sizes images
+ # for each breakpoint.
+ #
+ # Options:
+ #   class: CSS class to add to the image.
+ #   url: The url of the image.
+ #   width: The aspect-ratio width of the image.
+ #   height: The aspect-ratio height of the image.
+ #   alt: Alt text to apply. Defaults to ''.
+ #   breakpoint: Optional. A breakpoint config to match, similar to the SASS
+ #     mixin. For example, to render the image on laptop/desktop only, use
+ #     `breakpoint: laptop-gt`.
+ #}
+{% macro picture(options) %}
+  {% set isDynamic = isCloudImage(options.url) and "=" not in options.url %}
+  {% set breakpoints = options.breakpoints or pod.podspec.breakpoints %}
+  {% if isDynamic and breakpoints %}
+    <picture>
+      {% for breakpoint in breakpoints %}
+        {% if not options.breakpoint or options.breakpoint in breakpoint.matches %}
+        {% filter joinLines %}
+          <source
+            type="image/webp"
+            srcset="{{options.url}}=rw-e365-w{{breakpoint.width * 2}} 2x, {{options.url}}=rw-e365-w{{breakpoint.width}} 1x"
+            media="{{breakpoint.media}}"
+          />
+        {% endfilter %}
+        {% endif %}
+      {% endfor %}
+      {{image(options)}}
+    </picture>
+  {% else %}
+    {{image(options)}}
+  {% endif %}
+{% endmacro %}

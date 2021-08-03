@@ -1,0 +1,8 @@
+{% extends "/views/base.njk" %}
+
+{% block main %}
+  {% asyncEach partial in doc.fields.content.partials %}
+    {% set template = "/views/partials/" + partial.partial + ".njk" %}
+    {% include template %}
+  {% endeach %}
+{% endblock %}

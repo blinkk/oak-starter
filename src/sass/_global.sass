@@ -10,7 +10,7 @@ html
 // Set image aspect ratio based on width and height attrs.
 // https://www.smashingmagazine.com/2020/03/setting-height-width-images-important-again/
 img
-  aspect-ratio: attr(width) / attr(height)
+  aspect-ratio: var(--imgWidth, 1) / var(--imgHeight, 1)
   display: block
   height: auto
   max-width: 100%

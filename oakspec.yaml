@@ -33,3 +33,21 @@ localization:
   default_locale: en
   locales:
     - en
+
+breakpoints:
+  - id: 'mobile'
+    media: '(max-width: 767px)'
+    width: 768
+    matches: ['mobile', 'tablet-lt', 'laptop-lt']
+  - id: 'tablet'
+    media: '(min-width: 768px) and (max-width: 1023px)'
+    width: 1024
+    matches: ['tablet', 'tablet-lt', 'tablet-gt', 'laptop-lt', 'desktop-lt']
+  - id: 'laptop'
+    media: '(min-width: 1024px) and (max-width: 1339px)'
+    width: 1440
+    matches: ['tablet-gt', 'laptop', 'laptop-lt', 'laptop-gt', 'desktop-lt']
+  - id: 'desktop'
+    media: '(min-width: 1440px)'
+    width: 1440
+    matches: ['tablet-gt', 'laptop-gt', 'desktop']

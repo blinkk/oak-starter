@@ -1,7 +1,14 @@
-template: /views/pages/index.njk
+template: /views/templates/partials.njk
+
+partials: &partials
+- partial: heroSimple
+  class: heroSimple--home
+  content:
+    title: Home Page
 
 fields:
   meta:
     title: Home Page
     description: Lorem ipsum.
-  header: !oak.yaml /content/global/header.yaml
+  content:
+    partials: *partials
