@@ -16,9 +16,6 @@ routes:
   - path: /
     yaml: /content/pages/index.yaml
     localized: true
-  - path: /events/:slug/
-    yaml: /content/events/$slug.yaml
-    localized: true
 
   # Static files.
   - path: /images/*filepath
@@ -51,3 +48,5 @@ breakpoints:
     media: '(min-width: 1440px)'
     width: 1440
     matches: ['tablet-gt', 'laptop-gt', 'desktop']
+
+gci_backend: https://ext-cloud-images-dot-<gcp_project>.appspot.com

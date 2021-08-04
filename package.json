@@ -14,9 +14,12 @@
     "node": "14.x.x"
   },
   "dependencies": {
-    "@oak/oak": "latest"
+    "@oak/oak": "latest",
+    "crypto": "^1.0.1",
+    "nunjucks": "^3.2.3"
   },
   "devDependencies": {
+    "@types/nunjucks": "^3.1.5",
     "colors": "^1.4.0",
     "esbuild": "^0.12.1",
     "gulp": "^4.0.2",

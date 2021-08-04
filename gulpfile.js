@@ -54,6 +54,8 @@ gulp.task('build:oak', async () => {
     bundle: true,
     outfile: ENTRIES.oak.out,
     platform: 'node',
+    format: 'cjs',
+    external: ['fsevents'],
   });
   logStats(ENTRIES.oak.out);
 });

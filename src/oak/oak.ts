@@ -1,7 +1,7 @@
 import {BasicMinifierPlugin} from './plugins/basic-minifier';
 import {ResponsiveStylesPlugin} from './plugins/responsive-styles';
 import {CloudImagesPlugin} from './plugins/cloud-images';
-import {UtilsPlugin} from './plugins/utils';
+import {NunjucksUtilsPlugin} from './plugins/nunjucks-utils';
 import {Pod} from '@oak/oak/dist/src/cms/pod';
 
 module.exports = function(pod: Pod) {
@@ -9,8 +9,8 @@ module.exports = function(pod: Pod) {
   new BasicMinifierPlugin(pod);
   // Cloud images.
   new CloudImagesPlugin(pod);
+  // Utility functions.
+  new NunjucksUtilsPlugin(pod);
   // Responsive styles.
   new ResponsiveStylesPlugin(pod);
-  // Utility functions.
-  new UtilsPlugin(pod);
 };

@@ -21,13 +21,11 @@
     <picture>
       {% for breakpoint in breakpoints %}
         {% if not options.breakpoint or options.breakpoint in breakpoint.matches %}
-        {% filter joinLines %}
           <source
             type="image/webp"
             srcset="{{options.url}}=rw-e365-w{{breakpoint.width * 2}} 2x, {{options.url}}=rw-e365-w{{breakpoint.width}} 1x"
             media="{{breakpoint.media}}"
           />
-        {% endfilter %}
         {% endif %}
       {% endfor %}
       {{image(options)}}

@@ -11,6 +11,7 @@
     <script type="module">import('/js/main.esm.js').then(module=>module.main())</script>
   </head>
   <body>
+    {% block header %}{% include "/views/partials/header.njk" %}{% endblock %}
     {% block main %}{% endblock %}
     {% if rs.size() > 0 %}<style>{{rs.css()}}</style>{% endif %}
   </body>

@@ -1,0 +1,21 @@
+---
+fields: !oak.yaml /content/collections/BlogPost.yaml?fields
+---
+
+{% from "/views/macros/picture.njk" import picture %}
+
+{% extends "/views/base.njk" %}
+
+{% block main %}
+  <div class="blogPost grid">
+    <div class="blogPost__image">
+      {{picture(doc.fields.meta.image)}}
+    </div>
+    <div class="blogPost__title">
+      {{doc.fields.meta.title}}
+    </div>
+    <div class="blogPost__body">
+      {{doc.fields.content.body|markdown}}
+    </div>
+  </div>
+{% endblock %}

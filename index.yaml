@@ -40,3 +40,8 @@ indexes:
   properties:
   - name: modifiedAt
     direction: desc
+- kind: OakDBVersion
+  properties:
+  - name: path
+  - name: modifiedAt
+    direction: desc

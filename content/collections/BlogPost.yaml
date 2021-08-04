@@ -1,5 +1,31 @@
-template: /views/pages/blog-post.njk
+template: /views/templates/blogPost.njk
 experimental_layout:
   enabled: true
   title: meta.title
   image: meta.image
+
+fields:
+  - id: meta
+    type: group
+    label: Meta
+    fields:
+      - id: title
+        type: string
+        label: Title
+      - id: description
+        type: string
+        label: Description
+      - id: image
+        type: image
+        label: Image
+        alt_text: true
+  - id: content
+    type: group
+    label: Content
+    fields:
+      - id: body
+        type: richtext
+        min_height: 300
+        label: Markdown Body
+        help: |
+            Markdown cheat sheet: [markdownguide.org/cheat-sheet](https://www.markdownguide.org/cheat-sheet/)
