@@ -12,17 +12,21 @@ ENTRIES = {
   oak: {
     src: ['./src/oak/oak.ts'],
     out: './dist/oak.js',
-    watch: ['./src/oak/**/*.ts', './oakspec.yaml'],
+    watch: ['./src/oak/*.ts', './src/oak/**/*.ts', './oakspec.yaml'],
   },
   js: {
-    src: ['./src/ts/main.ts'],
-    out: './dist/js/main.esm.js',
+    src: [
+      './src/ts/main.ts',
+    ],
+    out: './dist/js/',
     watch: ['./src/ts/**/*.ts'],
   },
   sass: {
-    src: ['./src/sass/main.sass'],
-    out: './dist/css/main.min.css',
-    watch: ['./src/sass/**/*.sass'],
+    src: [
+      './src/sass/main.sass',
+    ],
+    out: './dist/css/',
+    watch: ['./src/sass/*.sass', './src/sass/**/*.sass'],
   },
 };
 
@@ -33,7 +37,7 @@ function logStats(outfiles) {
   outfiles.forEach(outfile => {
     const indent = ' '.repeat(4);
     const paddedSize = fileSize(outfile).padStart(8, ' ');
-    const file = path.normalize(outfile);
+    const file = path.basename(outfile);
     console.log(`${indent}${colors.white(paddedSize)}  ${colors.bold.white(file)}`);
   });
 }
@@ -54,33 +58,50 @@ gulp.task('build:oak', async () => {
     bundle: true,
     outfile: ENTRIES.oak.out,
     platform: 'node',
-    format: 'cjs',
-    external: ['fsevents'],
+    write: false,
   });
   logStats(ENTRIES.oak.out);
 });
 
 gulp.task('build:js:dev', async () => {
-  await esbuild.build({
+  const result = await esbuild.build({
     entryPoints: ENTRIES.js.src,
     bundle: true,
-    outfile: ENTRIES.js.out,
+    outdir: ENTRIES.js.out,
     platform: 'browser',
     format: 'esm',
+    write: false,
   });
-  logStats(ENTRIES.js.out);
+
+  if (!fs.existsSync(ENTRIES.js.out)) {
+    fs.mkdirSync(ENTRIES.js.out);
+  }
+  for (const out of result.outputFiles) {
+    const path = out.path.replace('.js', '.esm.js');
+    fs.writeFileSync(path, out.contents);
+    logStats(path);
+  }
 });
 
 gulp.task('build:js:prod', async () => {
-  await esbuild.build({
+  const result = await esbuild.build({
     entryPoints: ENTRIES.js.src,
     bundle: true,
-    outfile: ENTRIES.js.out,
+    outdir: ENTRIES.js.out,
     platform: 'browser',
     format: 'esm',
     minify: true,
+    write: false,
   });
-  logStats(ENTRIES.js.out);
+
+  if (!fs.existsSync(ENTRIES.js.out)) {
+    fs.mkdirSync(ENTRIES.js.out);
+  }
+  for (const out of result.outputFiles) {
+    const path = out.path.replace('.js', '.esm.js');
+    fs.writeFileSync(path, out.contents);
+    logStats(path);
+  }
 });
 
 gulp.task('watch:js', () => {
@@ -103,11 +124,11 @@ gulp.task('build:sass', () => {
     .on('error', sass.logError)
     .pipe(
       rename(filepath => {
-        filepath.basename = path.basename(ENTRIES.sass.out).slice(0, -4);
+        filepath.extname = '.min.css';
       })
     )
     .pipe(autoprefixer())
-    .pipe(gulp.dest(path.dirname(ENTRIES.sass.out)));
+    .pipe(gulp.dest(ENTRIES.sass.out));
 });
 
 gulp.task('watch:sass', () => {
