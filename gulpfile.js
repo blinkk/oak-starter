@@ -58,7 +58,6 @@ gulp.task('build:oak', async () => {
     bundle: true,
     outfile: ENTRIES.oak.out,
     platform: 'node',
-    write: false,
   });
   logStats(ENTRIES.oak.out);
 });

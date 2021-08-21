@@ -5,7 +5,10 @@ STAGING_VERSION = staging
 # Run `make install` to set up authentication to the NPM repo and to initialize
 # the project.
 .PHONY: install
-install: update-oak node_modules
+install:
+	npx google-artifactregistry-auth .npmrc
+	npm install @oak/oak@latest
+	npm install
 
 # The `make run` command starts a dev server and runs gulp in watch mode.
 .PHONY: run
